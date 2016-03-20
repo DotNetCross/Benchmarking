@@ -7,7 +7,7 @@ using Xunit;
 
 namespace DotNetCross.Benchmarking.UnitTests
 {
-    class TestTest
+    public class TestTest
     {
         [Fact]
         public void PassingTest()
