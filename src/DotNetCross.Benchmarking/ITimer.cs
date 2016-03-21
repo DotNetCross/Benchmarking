@@ -9,6 +9,6 @@ namespace DotNetCross.Benchmarking
     public interface ITimer
     {
         TimerSpec Spec { get; }
-        long Now { get; }
+        Ticks Now { get; }
     }
 }
