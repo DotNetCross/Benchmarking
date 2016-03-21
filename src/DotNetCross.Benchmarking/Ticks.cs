@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace DotNetCross.Benchmarking
 {
+    [DebuggerDisplay("{Value}")]
     public struct Ticks
         : IComparable
         , IComparable<Ticks>

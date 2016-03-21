@@ -2,7 +2,7 @@
 
 namespace DotNetCross.Benchmarking
 {
-    public class StopwatchTimer : ITimer
+    public sealed class StopwatchTimer : ITimer
     {
         public Ticks Now => new Ticks(Stopwatch.GetTimestamp());
 
