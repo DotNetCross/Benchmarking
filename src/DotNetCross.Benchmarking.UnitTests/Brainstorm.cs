@@ -11,15 +11,15 @@ namespace DotNetCross.Benchmarking.UnitTests
 {
     public class Brainstorm
     {
-        readonly ITestOutputHelper m_output;
+        readonly ITestOutputHelper _output;
 
         public Brainstorm(ITestOutputHelper output)
         {
-            m_output = output;
+            _output = output;
         }
 
         [Fact]
-        public void DeterminePrecisionViaTimer()
+        public void DeterminePrecisionOfTimer()
         {
             var timer = new StopwatchTimer();
             var timerSpec = timer.Spec;
@@ -32,8 +32,16 @@ namespace DotNetCross.Benchmarking.UnitTests
                 { after = timer.Now; }
                 var precision = after - before;
                 // The call to Now itself takes time so precision is often many ticks e.g. 100
-                m_output.WriteLine(precision.ToString());
+                _output.WriteLine(precision.ToString());
             }
+        }
+
+        [Fact]
+        public void MeasureTimerOverhead()
+        {
+            var minDiff = new TimerMeasurer().MeasureOverhead(new StopwatchTimer());
+            // The call to Now itself takes time so precision is often many ticks e.g. 100
+            _output.WriteLine(minDiff.ToString());
         }
     }
 }

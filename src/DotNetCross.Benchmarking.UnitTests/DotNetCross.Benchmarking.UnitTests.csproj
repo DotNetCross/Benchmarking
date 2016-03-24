@@ -54,8 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Brainstorm.cs" />
+    <Compile Include="RandomStepTimer.cs" />
+    <Compile Include="ConstantStepTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestTest.cs" />
+    <Compile Include="TimerMeasurerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

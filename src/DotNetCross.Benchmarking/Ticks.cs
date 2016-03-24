@@ -18,6 +18,9 @@ namespace DotNetCross.Benchmarking
             Value = ticks;
         }
 
+        public static implicit operator long(Ticks t) => t.Value;
+        public static implicit operator Ticks(long l) => new Ticks(l);
+
         /// <remarks>Note overflow/underflow may occur. TODO Might have to replace this with TicksSpan</remarks>
         public static Ticks operator -(Ticks t1, Ticks t2)
         {

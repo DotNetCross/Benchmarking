@@ -37,10 +37,15 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAction.cs" />
     <Compile Include="ITimer.cs" />
+    <Compile Include="Measurer.cs" />
+    <Compile Include="NoOpAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StopwatchTimer.cs" />
     <Compile Include="Ticks.cs" />
+    <Compile Include="TimerMeasurements.cs" />
+    <Compile Include="TimerMeasurer.cs" />
     <Compile Include="TimerSpec.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
