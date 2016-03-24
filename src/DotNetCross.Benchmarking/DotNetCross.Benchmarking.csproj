@@ -39,10 +39,12 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAction.cs" />
+    <Compile Include="Actions\Delegates.cs" />
+    <Compile Include="Actions\IAction.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="Measurer.cs" />
-    <Compile Include="NoOpAction.cs" />
+    <Compile Include="Actions\DelegateAction.cs" />
+    <Compile Include="Actions\NoOpAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StopwatchTimer.cs" />
     <Compile Include="Ticks.cs" />

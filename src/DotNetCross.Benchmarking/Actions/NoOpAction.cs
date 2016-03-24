@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace DotNetCross.Benchmarking
+namespace DotNetCross.Benchmarking.Actions
 {
     public struct NoOpAction : IAction
     {

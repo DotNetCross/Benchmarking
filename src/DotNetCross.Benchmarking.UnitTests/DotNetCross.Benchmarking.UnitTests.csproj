@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Brainstorm.cs" />
     <Compile Include="QueryPerformanceCounterTimer.cs" />
+    <Compile Include="DateTimeTimer.cs" />
     <Compile Include="RandomStepTimer.cs" />
     <Compile Include="ConstantStepTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

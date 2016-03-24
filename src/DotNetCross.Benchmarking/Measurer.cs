@@ -1,4 +1,5 @@
 using System;
+using DotNetCross.Benchmarking.Actions;
 
 namespace DotNetCross.Benchmarking
 {

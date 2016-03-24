@@ -44,6 +44,24 @@ namespace DotNetCross.Benchmarking.UnitTests
             _output.WriteLine(minDiff.ToString());
         }
         [Fact]
+        public void MeasureTimerPrecision_Stopwatch()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var precision = new TimerMeasurer().MeasurePrecision(new StopwatchTimer());
+                _output.WriteLine(precision.ToString());
+            }
+        }
+        [Fact]
+        public void MeasureTimerPrecision_DateTime()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var precision = new TimerMeasurer().MeasurePrecision(new DateTimeTimer());
+                _output.WriteLine(precision.ToString());
+            }
+        }
+        [Fact]
         public void MeasureTimerOverhead_QueryPerformanceCounter()
         {
             var minDiff = new TimerMeasurer().MeasureOverhead(new QueryPerformanceCounterTimer());

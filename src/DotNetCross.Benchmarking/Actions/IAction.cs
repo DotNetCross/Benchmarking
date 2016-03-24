@@ -1,4 +1,4 @@
-namespace DotNetCross.Benchmarking
+namespace DotNetCross.Benchmarking.Actions
 {
     public interface IAction
     {
