@@ -37,9 +37,16 @@ namespace DotNetCross.Benchmarking.UnitTests
         }
 
         [Fact]
-        public void MeasureTimerOverhead()
+        public void MeasureTimerOverhead_Stopwatch()
         {
             var minDiff = new TimerMeasurer().MeasureOverhead(new StopwatchTimer());
+            // The call to Now itself takes time so precision is often many ticks e.g. 100
+            _output.WriteLine(minDiff.ToString());
+        }
+        [Fact]
+        public void MeasureTimerOverhead_QueryPerformanceCounter()
+        {
+            var minDiff = new TimerMeasurer().MeasureOverhead(new QueryPerformanceCounterTimer());
             // The call to Now itself takes time so precision is often many ticks e.g. 100
             _output.WriteLine(minDiff.ToString());
         }
