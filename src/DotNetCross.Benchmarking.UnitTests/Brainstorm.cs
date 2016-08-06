@@ -55,7 +55,7 @@ namespace DotNetCross.Benchmarking.UnitTests
         [Fact]
         public void MeasureTimerPrecision_DateTime()
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var precision = new TimerMeasurer().MeasurePrecision(new DateTimeTimer());
                 _output.WriteLine(precision.ToString());

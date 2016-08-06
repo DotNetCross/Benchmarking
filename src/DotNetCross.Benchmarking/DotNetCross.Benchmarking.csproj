@@ -45,6 +45,7 @@
     <Compile Include="Measurer.cs" />
     <Compile Include="Actions\DelegateAction.cs" />
     <Compile Include="Actions\NoOpAction.cs" />
+    <Compile Include="MinMaxTicks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StopwatchTimer.cs" />
     <Compile Include="Ticks.cs" />
