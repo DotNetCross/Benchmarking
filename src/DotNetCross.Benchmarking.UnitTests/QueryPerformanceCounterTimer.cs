@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using DWORD = System.UInt32;
 
 namespace DotNetCross.Benchmarking
 {
@@ -31,9 +32,9 @@ namespace DotNetCross.Benchmarking
         }
 
         [DllImport(Kernel32), SuppressUnmanagedCodeSecurity]
-        static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
+        static extern DWORD QueryPerformanceCounter(out long lpPerformanceCount);
 
         [DllImport(Kernel32), SuppressUnmanagedCodeSecurity]
-        static extern bool QueryPerformanceFrequency(out long lpFrequency);
+        static extern DWORD QueryPerformanceFrequency(out long lpFrequency);
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DotNetCross.Benchmarking.UnitTests
@@ -31,6 +27,37 @@ namespace DotNetCross.Benchmarking.UnitTests
             var m = _sut.MeasureOverhead(timer);
 
             Assert.Equal(min, m.Value);
+        }
+
+        [Fact]
+        public void MeasurePrecision_ConstantStep()
+        {
+            long step = 17;
+            var timer = new ConstantStepTimer() { Step = step };
+            var measurements = new Ticks[53];
+
+            _sut.MeasurePrecision(timer, new ArraySegment<Ticks>(measurements));
+
+            foreach (var m in measurements)
+            { 
+                Assert.Equal(step, m.Value);
+            }
+        }
+
+        [Fact]
+        public void MeasurePrecision_Random()
+        {
+            int min = 3;
+            int max = 42;
+            var timer = new RandomStepTimer(17, min, max);
+            var measurements = new Ticks[53];
+
+            _sut.MeasurePrecision(timer, new ArraySegment<Ticks>(measurements));
+
+            foreach (var m in measurements)
+            {
+                Assert.InRange(m.Value, min, max);
+            }
         }
     }
 }
