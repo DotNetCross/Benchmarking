@@ -9,9 +9,9 @@ using DotNetCross.Benchmarking.Actions;
 
 namespace DotNetCross.Benchmarking
 {
-    public sealed class TimerMeasurer
+    public static class TimerMeasurer
     {
-        public Ticks MeasureOverhead<TTimer>(TTimer timer)
+        public static Ticks MeasureOverhead<TTimer>(TTimer timer)
             where TTimer : ITimer
         {
             // TODO: Clean this up, do we really need the whole warm-up thing...
@@ -25,7 +25,7 @@ namespace DotNetCross.Benchmarking
             return Measurer.MeasureMinDiffInsideLoop(timer, new NoOpAction(), 1000);
         }
 
-        public void MeasurePrecision<TTimer>(TTimer timer, ArraySegment<Ticks> measurements)
+        public static void MeasurePrecision<TTimer>(TTimer timer, ArraySegment<Ticks> measurements)
             where TTimer : ITimer
         {
             // JIT & Warm-up

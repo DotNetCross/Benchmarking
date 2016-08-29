@@ -46,7 +46,7 @@ namespace DotNetCross.Benchmarking.UnitTests
         [Fact]
         public void MeasureTimerOverhead_Stopwatch()
         {
-            var minDiff = new TimerMeasurer().MeasureOverhead(new StopwatchTimer());
+            var minDiff = TimerMeasurer.MeasureOverhead(new StopwatchTimer());
             // The call to Now itself takes time so precision is often many ticks e.g. 100
             _output.WriteLine(minDiff.ToString());
         }
@@ -77,7 +77,7 @@ namespace DotNetCross.Benchmarking.UnitTests
         {
             for (int i = 0; i < 10; i++)
             {
-                new TimerMeasurer().MeasurePrecision(timer, m_precisionMeasurements);
+                TimerMeasurer.MeasurePrecision(timer, m_precisionMeasurements);
                 m_precisionMeasurements.Sort();
                 var min = m_precisionMeasurements.First();
                 var median = m_precisionMeasurements.Middle();

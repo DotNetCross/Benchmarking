@@ -59,6 +59,7 @@
     <Compile Include="QueryPerformanceCounterTimer.cs" />
     <Compile Include="DateTimeTimer.cs" />
     <Compile Include="QuickPerfConfig.cs" />
+    <Compile Include="QuickPerfMeasurements.cs" />
     <Compile Include="QuickPerfTest.cs" />
     <Compile Include="QuickPerf.cs" />
     <Compile Include="RandomStepTimer.cs" />
