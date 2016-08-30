@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
+using DotNetCross.Benchmarking.Actions;
 
 namespace DotNetCross.Benchmarking.UnitTests
 {
@@ -79,9 +82,22 @@ namespace DotNetCross.Benchmarking.UnitTests
 
         public QuickPerfMeasurements Run(Action<string> log)//<T>(this QuickPerfConfig<T> config)
         {
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             var timer = new StopwatchTimer();
-            // Measure timer precision
+            var timerSpec = timer.Spec;
+            Func<double, double> toNs = ticks => 1000 * 1000 * 1000 * ticks / (double)timerSpec.Frequency;
+
+            const int MinTicksExtraMultiplier = 40;
+            const int PrecisionDigits = 3;
+            int precisionMultiplier = 1;
+            for (int i = 0; i < PrecisionDigits; i++)
+            {   precisionMultiplier *= 10; }
             const int precisionMeasurementCount = 11;
+            const int measurementsPerParamPerMethodCount = 21;
+
+            // Measure timer precision
             var precisionMeasurements = ReserveMeasurements(precisionMeasurementCount);
             TimerMeasurer.MeasurePrecision(timer, precisionMeasurements);
             precisionMeasurements.Sort();
@@ -89,18 +105,64 @@ namespace DotNetCross.Benchmarking.UnitTests
             var median = precisionMeasurements.Middle();
             var max = precisionMeasurements.Last();
             log?.Invoke($"Precision {min} - {median} - {max} ticks");
-            // foreach params
-            //   foreach method
-            //       // GC
-            //       find iteration count to reach required precision
-            //       // GC
-            //       measure idle time
-            //       
-            //       foreach measurement
-            //          // GC
-            //          measure method
 
+            var minTicksForMeasurement = median * precisionMultiplier * MinTicksExtraMultiplier;
+
+            foreach (var param in m_params)
+            {
+                // TODO: When to do
+                m_setup?.Invoke(param);
+
+                foreach (var namedMethod in m_methods)
+                {
+                    var method = namedMethod.Method;
+                    var methodAction = new DelegateAction(method);
+                    var idleAction = new DelegateAction(IdleAction);
+                    // Pre-JIT and warmup
+                    var warmupIdleTime = Measurer.MeasureDiffOutsideLoop(timer, idleAction, 3);
+                    var warmupTime = Measurer.MeasureDiffOutsideLoop(timer, methodAction, 3);
+
+                    ForceAndWaitForGarbageCollection();
+                    var iterationCount = FindIterationCount(timer, method, minTicksForMeasurement, log);
+
+                    //ForceAndWaitForGarbageCollection();
+                    var idleTime = Measurer.MeasureDiffOutsideLoop(timer, idleAction, iterationCount);
+                    log?.Invoke($"Idle Ticks: {idleTime} ns: {toNs(idleTime / (double)iterationCount)}");
+
+                    var measurements = ReserveMeasurements(measurementsPerParamPerMethodCount);
+                    ForceAndWaitForGarbageCollection();
+                    for (int i = 0; i < measurements.Count; i++)
+                    {
+                        //ForceAndWaitForGarbageCollection();
+                        var methodTime = Measurer.MeasureDiffOutsideLoop(timer, methodAction, iterationCount);
+                        measurements.Set(i, methodTime);
+                        log?.Invoke($"{namedMethod.Name} Ticks: {methodTime} ns: {toNs(methodTime / (double)iterationCount)}");
+                    }
+
+                }
+            }
             return new QuickPerfMeasurements();
+        }
+
+        private int FindIterationCount(StopwatchTimer timer, Action method, long minTicksForMeasurement,
+            Action<string> log)
+        {
+            var iterationCount = 1;
+            var diff = Measurer.MeasureDiffOutsideLoop(timer, new DelegateAction(method), iterationCount);
+            while (diff < minTicksForMeasurement || diff > minTicksForMeasurement * 2)
+            {
+                iterationCount = (int)((iterationCount * minTicksForMeasurement) / Math.Max(diff, 1));
+                diff = Measurer.MeasureDiffOutsideLoop(timer, new DelegateAction(method), iterationCount);
+                log?.Invoke($"Diff {diff} IterationCount {iterationCount}");
+            }
+
+            return iterationCount;
+        }
+        
+        private static void ForceAndWaitForGarbageCollection()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         private ArraySegment<Ticks> ReserveMeasurements(int precisionMeasurementCount)

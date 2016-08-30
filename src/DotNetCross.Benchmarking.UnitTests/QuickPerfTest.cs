@@ -26,14 +26,14 @@ namespace DotNetCross.Benchmarking.UnitTests
         public void Run()
         {
             var measurements = QuickPerf.New(nameof(QuickPerfTest))
-                .Params(new { Count = 2, Offset = 1 }, new { Count = 3, Offset = 1 })
+                .Params(new { Count = 2, Offset = 1 }, new { Count = 43, Offset = 1 })
                 .ParamDetail(p => p.Count.ToString(), p => nameof(p.Count))
                 .ParamDetail(p => p.Offset.ToString(), p => nameof(p.Offset))
                 // TODO: Add Setup scope e.g. PerParams, PerMeasurement, PerIteration/PerOp 
                 // TODO: Perhaps return object to test on instead/reuse is possible...
                 .Setup(p => Setup(p.Count, p.Offset)) 
-                .Measure(MethodA, nameof(MethodA))
-                .Measure(MethodB, nameof(MethodB))
+                .Measure(ArrayCopy, nameof(ArrayCopy))
+                .Measure(SimpleLoop, nameof(SimpleLoop))
                 .Run(t => m_output.WriteLine(t));
         }
 
@@ -43,12 +43,12 @@ namespace DotNetCross.Benchmarking.UnitTests
             m_offset = offset;
         }
 
-        public void MethodA()
+        public void ArrayCopy()
         {
             Array.Copy(m_src, m_offset, m_dst, m_offset, m_count);
         }
 
-        public void MethodB()
+        public void SimpleLoop()
         {
             for (int i = 0; i < m_count; i++)
             {
